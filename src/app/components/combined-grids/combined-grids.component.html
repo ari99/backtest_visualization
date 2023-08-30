@@ -1,0 +1,33 @@
+<span *ngFor="let item of displayOptions | keyvalue">
+  <button mat-stroked-button (click)="toggleDisplayOption($any(item).key)">{{item.value.label}}</button>
+</span>
+<div>
+  <button mat-stroked-button color="warn" (click)="closeAll()">Close All</button>
+</div>
+<h2>Backtests</h2>
+<span *ngFor="let item of backtestDisplayOptions; index as indexOfelement;" >
+  <button mat-stroked-button (click)="toggleBacktestDisplayOptions(indexOfelement)">{{item.label}}</button>
+</span>
+<div>
+  <button mat-stroked-button color="warn" (click)="closeAllBacktests();">Close all</button>
+  <button  mat-stroked-button color="primary" (click)="openAllBacktests()">Open all</button>
+</div>
+<div style="clear: both"></div>
+
+<div *ngIf="isReady && state">
+  <app-scalar-grid *ngIf="displayOptions['alphaStats'].show" [tableData]="state.alphaStats" name="Alpha Statistics"></app-scalar-grid>
+  <app-scalar-grid  *ngIf="displayOptions['statistics'].show" [tableData]="state.statistics" name="Statistics"></app-scalar-grid>
+  <app-scalar-grid *ngIf="displayOptions['tradeStats'].show" [tableData]="state.tradeStatistics" name="Trade Statistics"></app-scalar-grid>
+  <app-scalar-grid *ngIf="displayOptions['runtimeStats'].show" [tableData]="state.runtimeStatistics" name="RuntimeStatistics"></app-scalar-grid>
+  <app-scalar-grid *ngIf="displayOptions['portfolioStats'].show" [tableData]="state.portfolioStatistics" name="Portfolio Statistics"></app-scalar-grid>
+
+
+  <div style="clear: both"></div>
+  <app-table-grid  *ngIf="displayOptions['orders'].show" [tableData]="state.orders" name="Orders"></app-table-grid>
+  <app-table-grid  *ngIf="displayOptions['rollingTradeStats'].show" [tableData]="state.rollingTradeStats" [convertValues]="false" name="Rolling Trade Statistics"></app-table-grid>
+  <app-table-grid  *ngIf="displayOptions['rollingPortfolioStats'].show" [tableData]="state.rollingPortfolioStats" [convertValues]="false" name="Rolling Portfolio Statistics"></app-table-grid>
+  <app-table-grid  *ngIf="displayOptions['rollingClosedTrades'].show" [tableData]="state.rollingClosedTrades" [convertValues]="false" name="Rolling Closed Trades"></app-table-grid>
+  <app-table-grid  *ngIf="displayOptions['totalPerformanceClosedTrades'].show" [tableData]="state.closedTrades" [convertValues]="true"
+                   name="Total Performance Closed Trades"></app-table-grid>
+
+</div>

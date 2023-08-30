@@ -1,0 +1,9 @@
+
+<h2>Backtests</h2>
+
+<div *ngFor="let item of btDatas; index as indexOfElement;" >
+  <app-all-grids backtestPath="{{item.backtestPath}}" backtestLabel="{{item.label}}"></app-all-grids>
+  <div style="clear: both"></div>
+</div>
+
+

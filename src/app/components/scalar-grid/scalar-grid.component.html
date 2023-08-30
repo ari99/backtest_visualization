@@ -1,0 +1,12 @@
+<div *ngIf="rowData" style="float: left">
+<h3>{{name}}</h3>
+<ag-grid-angular
+  style="width: 1000px; height: 500px;"
+  class="ag-theme-balham"
+  [gridOptions]="keyValGridOptions"
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+>
+</ag-grid-angular>
+
+</div>

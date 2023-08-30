@@ -1,0 +1,33 @@
+
+
+<mat-expansion-panel hideToggle>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Stocks
+    </mat-panel-title>
+    <mat-panel-description>
+      toggle stocks
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <span  *ngFor="let item of stockDatas; index as indexOfElement;">
+      <!--<mat-toolbar-row *ngIf="indexOfElement % 5 == 0; else elseBlock">-->
+    <button mat-flat-button (click)="toggleChartDisplay(indexOfElement)">{{item.ticker}}</button>
+  </span>
+  <div>
+    <button mat-flat-button (click)="closeAll()">close all</button>
+  </div>
+</mat-expansion-panel>
+
+
+
+
+
+
+<div *ngIf="isReady">
+<div *ngFor="let stockData of stockDatas">
+  <!--[backtestData]="backtestData"-->
+  <app-stock-chart2 *ngIf="stockData.show"  [backtestData]="backtestData" [stockData]="stockData"></app-stock-chart2>
+</div>
+</div>
+

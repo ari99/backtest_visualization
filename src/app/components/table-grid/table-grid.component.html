@@ -1,0 +1,11 @@
+<div *ngIf="rowData">
+  <h2>{{name}}</h2>
+  <ag-grid-angular
+    style="height: 500px;"
+    class="ag-theme-balham"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+  >
+  </ag-grid-angular>
+</div>

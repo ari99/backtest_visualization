@@ -1,0 +1,180 @@
+<!--<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/indicators/indicators-all.js"></script>
+<script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+-->
+
+
+<mat-expansion-panel hideToggle>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{stockData.ticker}}
+    </mat-panel-title>
+    <mat-panel-description>
+      toggle params
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+
+
+  <div *ngIf="chartState?.stockSubCharts">
+    <mat-grid-list cols="7" rowHeight="125px">
+      <div *ngFor="let subChart of chartState?.stockSubCharts">
+        <mat-grid-tile
+          [colspan]="1"
+          [rowspan]="1">
+          {{subChart.series.name}}
+        </mat-grid-tile>
+
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.text-align]="'left'">
+
+          <span *ngIf="hasProp(subChart.series, 'params')" >
+            <mat-form-field class="chart-param" *ngFor="let keyVal of subChart.series.params |  keyvalue">
+              <mat-label>{{keyVal.key}}</mat-label>
+              <!--TODO if you change this then update
+              https://stackoverflow.com/questions/56746340/angular-8-ngfors-keyvalue-pipe-and-ngmodels-having-issues-binding-values/74845535#74845535
+
+             [ngModel]="subChart.series.params[castToString(keyVal.key)]"
+              -->
+
+              <input matInput type="number"
+                     [value]="subChart.series.params[castToString(keyVal.key)]"
+                     (change)="onValueUpdate($event, subChart, subChart.subChartId, castToString(keyVal.key))"/>
+            </mat-form-field>
+          </span>
+        </mat-grid-tile>
+
+          <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="1"
+            [style.text-align]="'left'">
+
+          <!--&& subChart.yAxisOptions.height != undefined-->
+          <mat-form-field *ngIf="subChart.yAxisOptions" class="chart-param">
+            <mat-label>height</mat-label>
+            <input matInput type="number" [(ngModel)]="subChart.yAxisOptions.height" [placeholder]="''"
+                   [value]="castToString(subChart.yAxisOptions.height)" />
+          </mat-form-field>
+
+
+          <!--&& subChart.yAxisOptions.top != undefined -->
+          <mat-form-field *ngIf="subChart.yAxisOptions" class="chart-param">
+            <mat-label>top</mat-label>
+            <input matInput type="number" [(ngModel)]="subChart.yAxisOptions.top" [placeholder]="''"
+                   [value]="castToString(subChart.yAxisOptions.top)" />
+          </mat-form-field>
+
+
+          <mat-form-field *ngIf="subChart.showChartTypeOption" appearance="fill" class="chart-param-wide">
+            <mat-label class="lower-font">Chart type:</mat-label>
+            <mat-select  id="chartTypes"   [(ngModel)]="subChart.series.type" [value]="subChart.series.type">
+              <mat-option *ngFor="let chartType of chartTypeOptions |  keyvalue" [value]="chartType.key">
+                {{chartType.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile
+          [colspan]="2"
+          [rowspan]="1"
+          [style.background]="">
+
+          <mat-form-field *ngIf="subChart.showAddOrdersOption" appearance="fill" class="chart-param-wide">
+            <mat-label class="lower-font">Add Orders:</mat-label>
+            <mat-select class="lower-font" id="orders" (selectionChange)="addOrders($event, subChart.series.id)" >
+              <mat-option  class="lower-font" *ngFor="let bt of backtestData" [value]="bt.id">
+                {{bt.id}}{{bt.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-flat-button (click)="updateSubChart(subChart)" color="primary">Update</button>
+
+          <button mat-flat-button (click)="removeSubChart(subChart)" color="primary">Delete</button>
+        </mat-grid-tile>
+
+      </div>
+    </mat-grid-list>
+  </div>
+
+</mat-expansion-panel>
+
+<div>
+<mat-form-field appearance="fill" class="chart-param">
+  <mat-label>Overlays:</mat-label>
+  <mat-select id="overlays">
+    <mat-option (click)="addOverlay(overlayOption.key)"
+                *ngFor="let overlayOption of overlayOptions |  keyvalue" [value]="overlayOption.key">
+      {{overlayOption.value}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+
+
+<mat-form-field appearance="fill" class="chart-param">
+  <mat-label>Oscillators:</mat-label>
+  <mat-select  id="oscillators"  (selectionChange)="addOscillator($event)">
+    <mat-option *ngFor="let oscillatorOption of oscillatorOptions |  keyvalue" [value]="oscillatorOption.key">
+      {{oscillatorOption.value}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="chart-param">
+  <mat-label>CustomStats:</mat-label>
+  <mat-select  id="customStats"  (selectionChange)="addCustomStat($event)">
+    <mat-option *ngFor="let customStat of customStatsOptions |  keyvalue" [value]="customStat.key">
+      {{customStat.value}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="chart-param">
+  <mat-label>Backtest Chart Options:</mat-label>
+  <mat-select  id="backtestChartStats"  (selectionChange)="addBacktestStatClick($event)">
+    <mat-option *ngFor="let option of backtestStatsOptions  |  keyvalue" [value]="option">
+      {{option.key}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+  <button mat-flat-button *ngIf="chartState && chartState.getHasStockChart() == false" (click)="addCandlestickSubChart()">Add stock chart</button>
+<button mat-flat-button (click)="saveState()">Save State</button>
+<button mat-flat-button (click)="loadState()">Load State</button>
+</div>
+
+<!--
+<div>
+  <span>Backtests</span>
+  <span *ngFor="let item of backtestDatas; index as indexOfelement;" >
+    <button mat-flat-button (click)="onBacktestClicked(indexOfelement)">{{item.label}}</button>
+  </span>
+</div>
+
+<div>
+  <button (click)="closeAllBacktests();">close all</button>
+</div>
+<div>
+  <button (click)="openAllBacktests()">open all</button>
+</div>
+-->
+
+<div  *ngIf="isReady">
+  <!--<h3>showing chart</h3>
+  {{chartOptions | json}}
+  <h3>end</h3>-->
+  <highcharts-chart
+    [Highcharts]="Highcharts"
+    [constructorType]="'stockChart'"
+    [options]="chartOptions"
+    [callbackFunction]="chartCallback"
+  ></highcharts-chart>
+</div>
+
+

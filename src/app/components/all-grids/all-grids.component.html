@@ -1,0 +1,36 @@
+<h3 class="backtestLabel">{{backtestLabel}}</h3>
+<span>{{backtestPath}}</span>
+<p>
+<span *ngFor="let item of displayOptions | keyvalue">
+  <button mat-stroked-button (click)="toggleDisplayOption($any(item).key)">{{item.value.label}} </button>
+</span>
+</p>
+<div *ngIf="btData">
+  <app-scalar-grid *ngIf="displayOptions['alphaStats'].show" [tableData]="alphaStats" name="Alpha Statistics"></app-scalar-grid>
+
+    <app-scalar-grid  *ngIf="displayOptions['statistics'].show" [tableData]="statistics" name="Statistics"></app-scalar-grid>
+
+    <app-scalar-grid *ngIf="displayOptions['tradeStats'].show" [tableData]="tradeStatistics" name="Trade Statistics"></app-scalar-grid>
+     <app-scalar-grid *ngIf="displayOptions['portfolioStats'].show" [tableData]="portfolioStatistics" name="Portfolio Statistics"></app-scalar-grid>
+     <app-scalar-grid *ngIf="displayOptions['runtimeStats'].show" [tableData]="runtimeStatistics" name="RuntimeStatistics"></app-scalar-grid>
+
+  <div style="clear: both"></div>
+     <app-table-grid  *ngIf="displayOptions['orders'].show"
+                      [tableData]="orders" [convertObjectToArray]="true" name="Orders"></app-table-grid>
+
+     <app-table-grid  *ngIf="displayOptions['rollingTradeStats'].show"
+                      [tableData]="rollingTradeStats" [convertValues]="false" name="Rolling Trade Statistics"></app-table-grid>
+
+     <app-table-grid  *ngIf="displayOptions['rollingPortfolioStats'].show"
+                      [tableData]="rollingPortfolioStats" [convertValues]="false" name="Rolling Portfolio Statistics"></app-table-grid>
+
+     <app-table-grid  *ngIf="displayOptions['rollingClosedTrades'].show"
+                      [tableData]="rollingClosedTrades" [convertValues]="false" name="Rolling Closed Trades"></app-table-grid>
+
+     <app-table-grid  *ngIf="displayOptions['totalPerformanceClosedTrades'].show"
+                      [tableData]="closedTrades" [convertObjectToArray]="true" [convertValues]="true"
+                       name="Total Performance Closed Trades"></app-table-grid>
+
+
+ </div>
+

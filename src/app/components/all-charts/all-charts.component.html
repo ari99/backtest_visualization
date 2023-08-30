@@ -1,0 +1,63 @@
+
+
+<span *ngFor="let item of chartDisplayOptions | keyvalue">
+  <button mat-stroked-button (click)="toggleDisplayOption($any(item).key)">{{item.value.label}}</button>
+</span>
+<div>
+  <button mat-stroked-button color="warn" (click)="closeAll()">Close All</button>
+</div>
+<!--
+<h2>backtests</h2>
+<div *ngFor="let item of backtestDisplayOptions; index as indexOfelement;" >
+  <button (click)="toggleBacktestDisplayOptions(indexOfelement)">{{item.label}}</button>
+</div>
+<div>
+  <button (click)="closeAllBacktests();">close all</button>
+</div>
+<div>
+  <button (click)="openAllBacktests()">open all</button>
+</div>
+
+-->
+
+
+<div *ngIf="isReady">
+<app-line-chart *ngIf="chartDisplayOptions['capacity'].show"
+                [inputSeries]="capacitySeries" chartTitle="Capacity"></app-line-chart>
+
+<app-line-chart *ngIf="chartDisplayOptions['equityLongRatio'].show"
+                [inputSeries]="equityLongRatioSeries" chartTitle="Equity Long Ratio"></app-line-chart>
+
+<app-line-chart *ngIf="chartDisplayOptions['equityShortRatio'].show"
+                [inputSeries]="equityShortRatioSeries" chartTitle="Equity Short Ratio"></app-line-chart>
+
+<app-line-chart *ngIf="chartDisplayOptions['benchmark'].show"
+                [inputSeries]="benchmarkSeries" chartTitle="Benchmark"></app-line-chart>
+
+<app-line-chart *ngIf="chartDisplayOptions['drawdown'].show"
+                [inputSeries]="drawdownSeries" chartTitle="Drawdown"></app-line-chart>
+
+
+<app-line-chart *ngIf="chartDisplayOptions['strategyEquity'].show"
+                [inputSeries]="strategyEquitySeries" chartTitle="Strategy Equity"></app-line-chart>
+
+
+  <app-line-chart *ngIf="chartDisplayOptions['profitLoss'].show"
+                  [inputSeries]="profitLossSeries" chartTitle="Profit Loss"></app-line-chart>
+
+
+  <app-line-chart *ngIf="chartDisplayOptions['holdingsValues'].show"
+                  [inputSeries]="holdingsValuesSeries" chartTitle="Holdings Values"></app-line-chart>
+
+  <app-line-chart *ngIf="chartDisplayOptions['statsProfits'].show"
+                  [inputSeries]="unrealizedProfitPercentsSeries" chartTitle="Stats Profits"></app-line-chart>
+
+  <app-line-chart *ngIf="chartDisplayOptions['unrealizedProfits'].show"
+                  [inputSeries]="unrealizedProfitsSeries" chartTitle="Unrealized Profits"></app-line-chart>
+
+  <app-line-chart *ngIf="chartDisplayOptions['unrealizedProfitPercents'].show"
+                  [inputSeries]="unrealizedProfitPercentsSeries" chartTitle="Unrealized Profit Percents"></app-line-chart>
+
+
+
+</div>
